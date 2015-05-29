@@ -1,6 +1,6 @@
 ---
 
-# file: : roles/ansible-xtables_geoip/defaults/main.yaml
+# file: roles/ansible-xtables_geoip/defaults/main.yaml
 
 xtables_geoip_tmp_download_dir: '/tmp/geoip_tmp_download_dir'
 xtables_geoip_download_cmd: '/usr/lib/xtables-addons/xt_geoip_dl'

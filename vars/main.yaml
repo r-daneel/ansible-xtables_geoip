@@ -7,4 +7,3 @@ xtables_geoip_packages:
   - xtables-addons-common
   - libtext-csv-xs-perl
   - geoip-database-contrib
-

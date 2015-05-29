@@ -1,10 +1,11 @@
 ---
 
-# file: # file: : roles/ansible-xtables_geoip/tasks/main.yml
+# file: roles/ansible-xtables_geoip/tasks/main.yml
+
 
 - name: ensure xtables packages are installed
   apt: pkg={{ item }} state=installed
-  with_items: xtables_packages
+  with_items: xtables_geoip_packages
 
 - name: create temporary downlaod folder
   file:
@@ -13,9 +14,7 @@
     mode: '0700'
 
 - name: download geoip files
-  shell:|
-    cd {{ geoip_tmp_download_dir }};
-    {{ geoip_download_cmd }}
+  shell: "cd {{ xtables_geoip_tmp_download_dir }}; {{ xtables_geoip_download_cmd }}"
 
 - name: create xtables geoip directory
   file:
