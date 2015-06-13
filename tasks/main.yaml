@@ -7,7 +7,7 @@
   apt: pkg={{ item }} state=installed
   with_items: xtables_geoip_packages
 
-- name: create temporary downlaod folder
+- name: create temporary download folder
   file:
     path: '{{ xtables_geoip_tmp_download_dir }}'
     state: directory
@@ -25,7 +25,7 @@
 - name: convert geoip files for xtables
   shell: "{{ xtables_geoip_build_cmd }} -D {{ xtables_geoip_directory }} {{ xtables_geoip_tmp_download_dir }}/*.csv"
 
-- name: cleanup temporary downlaod folder
+- name: cleanup temporary download folder
   file:
     path: '{{ xtables_geoip_tmp_download_dir }}'
     state: absent
