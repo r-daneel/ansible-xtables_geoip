@@ -2,30 +2,36 @@
 
 # file: roles/ansible-xtables_geoip/tasks/main.yml
 
-
 - name: ensure xtables packages are installed
-  apt: pkg={{ item }} state=installed
-  with_items: xtables_geoip_packages
+  apt:
+    name: "{{ xtables_geoip_packages }}"
+    state: "present"
+    update_cache: true
+    cache_valid_time: "3600"
 
-- name: create temporary download folder
-  file:
-    path: '{{ xtables_geoip_tmp_download_dir }}'
-    state: directory
-    mode: '0700'
+- name: "push geoip-update scripts"
+  copy:
+    src: "{{ script }}"
+    dest: "{{ xtables_geoip_scripts_dir }}"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+  loop: "{{ xtables_geoip_scripts }}"
+  loop_control:
+    loop_var: script
 
-- name: download geoip files
-  shell: "cd {{ xtables_geoip_tmp_download_dir }}; {{ xtables_geoip_download_cmd }}"
+- name: "setup cron job for geoip update script"
+  copy:
+    content: |
+      0 0 1 * * root {{ xtables_geoip_update_script_path }} >> {{ xtables_geoip_update_script_logs }} 2>&1
+      0 1 1 1 * root /bin/mv -f {{ xtables_geoip_update_script_logs }} {{ xtables_geoip_update_script_logs }}.1
+    dest: "/etc/cron.d/geoip-update"
+    owner: "root"
+    group: "root"
+    mode: "0644"
 
-- name: create xtables geoip directory
-  file:
-    path: '{{ xtables_geoip_directory }}'
-    state: directory
-    mode: '0700'
-
-- name: convert geoip files for xtables
-  shell: "{{ xtables_geoip_build_cmd }} -D {{ xtables_geoip_directory }} {{ xtables_geoip_tmp_download_dir }}/*.csv"
-
-- name: cleanup temporary download folder
-  file:
-    path: '{{ xtables_geoip_tmp_download_dir }}'
-    state: absent
+- name: "initial geoip update run"
+  shell: >
+    {{ xtables_geoip_update_script_path }} > {{ xtables_geoip_update_script_logs }} 2>&1
+  args:
+    creates: "{{ xtables_geoip_update_script_logs }}"

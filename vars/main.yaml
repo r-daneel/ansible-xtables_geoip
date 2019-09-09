@@ -1,9 +1,9 @@
 ---
 
-# file: # file: : roles/ansible-xtables_geoip/vars/main.yaml
+# file: roles/ansible-xtables_geoip/vars/main.yaml
 
 xtables_geoip_packages:
-  - linux-headers-generic
-  - xtables-addons-common
-  - libtext-csv-xs-perl
-  - geoip-database-contrib
+  - "xtables-addons-common"
+  - "libtext-csv-xs-perl"
+  - "geoip-bin"
+  - "libnetaddr-ip-perl"

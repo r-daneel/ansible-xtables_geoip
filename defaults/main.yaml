@@ -2,7 +2,9 @@
 
 # file: roles/ansible-xtables_geoip/defaults/main.yaml
 
-xtables_geoip_tmp_download_dir: '/tmp/geoip_tmp_download_dir'
-xtables_geoip_download_cmd: '/usr/lib/xtables-addons/xt_geoip_dl'
-xtables_geoip_directory: '/usr/share/xt_geoip'
-xtables_geoip_build_cmd: '/usr/lib/xtables-addons/xt_geoip_build'
+xtables_geoip_scripts:
+  - "geoip-update.sh"
+  - "GeoLite2xtables.pl"
+xtables_geoip_scripts_dir: "/usr/local/bin"
+xtables_geoip_update_script_path: "{{ xtables_geoip_scripts_dir }}/geoip-update.sh"
+xtables_geoip_update_script_logs: "/var/log/geoip-update.log"
